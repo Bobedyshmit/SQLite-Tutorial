@@ -14,7 +14,13 @@ public class Database implements AutoCloseable {
     private static final String INSERT_PERSON       = "insert into " + PEOPLE_TABLE + " values (?, ?, ?, ?)";
     private static final String DELETE_PERSON       = "delete from " + PEOPLE_TABLE + " where (? = personId)";
     private static final String SELECT_PERSON       = "select personId from " + PEOPLE_TABLE;
-
+    
+    private final int PERSON_ID = 1;
+    private final int FIRST_NAME = 2;
+    private final int LAST_NAME = 3;
+    private final int AGE = 4;
+    
+    
     private final Connection    connection;
 
     public Database() throws SQLException {
@@ -31,10 +37,10 @@ public class Database implements AutoCloseable {
     public void insertPerson(final Person person) throws SQLException {
         try (final PreparedStatement stmt = connection.prepareStatement(INSERT_PERSON)) {
             if (!isPersonEntered(person)) {
-                stmt.setInt(1, person.getPersonId());
-                stmt.setString(2, person.getFirstName());
-                stmt.setString(3, person.getLastName());
-                stmt.setInt(4, person.getAge());
+                stmt.setInt(PERSON_ID, person.getPersonId());
+                stmt.setString(FIRST_NAME, person.getFirstName());
+                stmt.setString(LAST_NAME, person.getLastName());
+                stmt.setInt(AGE, person.getAge());
                 stmt.execute();
             }
         }
@@ -51,7 +57,7 @@ public class Database implements AutoCloseable {
         try (final Statement stmt = connection.createStatement()) {
             final ResultSet rs = stmt.executeQuery(SELECT_PERSON);
             while (rs.next()) {
-                if (person.getPersonId() == rs.getInt("personId")) {
+                if (person.getPersonId() == rs.getInt(PERSON_ID)) {
                     return true;
                 }
             }
