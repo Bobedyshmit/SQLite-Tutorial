@@ -51,7 +51,7 @@ public class Database implements AutoCloseable {
         try (final Statement stmt = connection.createStatement()) {
             final ResultSet rs = stmt.executeQuery(SELECT_PERSON);
             while (rs.next()) {
-                if (person.getPersonId() == rs.getInt(1)) {
+                if (person.getPersonId() == rs.getInt("personId")) {
                     return true;
                 }
             }
